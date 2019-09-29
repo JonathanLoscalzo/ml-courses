@@ -39,12 +39,15 @@ Theta2_grad = zeros(size(Theta2));
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
 
+% respuestas de mi modelo, pero de manera 1-hot encoding 
 Y = zeros(m, num_labels);
 for k = 1:m
   Y(k,y(k)) = 1;
 endfor
 
-a1 = [ones(m, 1) X];
+% agregamos el bias en la entrada, y todas las features de inputs
+a0 = ones(m, 1);
+a1 = [a0 X];
 z2 = a1*Theta1';
 a2 = sigmoid(z2);
 a2 = [ones(size(a2,1),1) a2];
@@ -79,11 +82,14 @@ J = (1/m) * sum(sum((-Y).*log(h) - (1-Y).*log(1-h), 2)) + ((lambda/(2*m)) * (l1+
 %
 
 d3 = a3-Y;
-d2 = (Theta2' * d3')'.*sigmoidGradient([ones(size(z2, 1), 1) z2]);
+
+d2 = d3 * Theta2 .* [ones(m,1) sigmoidGradient(z2)];
+
+%removemos d2sub0 o bias (no se puede calcular el error al bias)
 d2 = d2(:, 2:end);
 
-Theta1_grad = (d2'*a1)./m ;
-Theta2_grad =  (d3'*a2)./m ;
+Theta1_grad = (1/m) * (d2'*a1) ;
+Theta2_grad = (1/m) * (d3'*a2) ;
 
 % Part 3: Implement regularization with the cost function and gradients.
 %
