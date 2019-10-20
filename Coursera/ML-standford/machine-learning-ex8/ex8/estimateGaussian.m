@@ -23,9 +23,13 @@ sigma2 = zeros(n, 1);
 
 
 
+x_mu = mean(X(:,1));
+y_mu = mean(X(:,2));
 
 
+mu = mean(X,1)';
 
+sigma2 = var(X,1)';
 
 
 

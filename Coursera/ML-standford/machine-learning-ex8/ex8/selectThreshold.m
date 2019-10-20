@@ -9,34 +9,41 @@ function [bestEpsilon bestF1] = selectThreshold(yval, pval)
 bestEpsilon = 0;
 bestF1 = 0;
 F1 = 0;
+precision = 0;
+recall = 0;
 
 stepsize = (max(pval) - min(pval)) / 1000;
 for epsilon = min(pval):stepsize:max(pval)
+
+    ypred = (pval < epsilon);
+    tp = sum((ypred == 1) & (yval == 1));
+    fp = sum((ypred == 1) & (yval == 0));
+    fn = sum((ypred == 0) & (yval == 1));
     
-    % ====================== YOUR CODE HERE ======================
-    % Instructions: Compute the F1 score of choosing epsilon as the
-    %               threshold and place the value in F1. The code at the
-    %               end of the loop will compare the F1 score for this
-    %               choice of epsilon and set it to be the best epsilon if
-    %               it is better than the current choice of epsilon.
-    %               
-    % Note: You can use predictions = (pval < epsilon) to get a binary vector
-    %       of 0's and 1's of the outlier predictions
-
-
-
-
-
-
-
-
-
-
-
-
-
-    % =============================================================
-
+    if (tp+fp) > 0
+      precision = tp / (tp + fp);
+    else
+      precision = 0;
+    end
+    if (tp + fn) > 0
+      recall = tp / (tp + fn);
+     else 
+      recall = 0;
+     end
+    
+    if (precision + recall) > 0 
+      F1 = 2 * (precision * recall) / (precision + recall);
+    else
+      F1 = 0
+    end
+    
+    disp("=====================");
+    disp(tp);
+    disp(fp);
+    disp(fn);
+    disp(F1);
+    disp("=====================");
+    
     if F1 > bestF1
        bestF1 = F1;
        bestEpsilon = epsilon;
