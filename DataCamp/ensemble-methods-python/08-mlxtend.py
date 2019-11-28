@@ -60,3 +60,4 @@ clf_stack.fit(X_train, y_train)
 
 # Evaluate the stacked model’s performance
 print("Accuracy: {:0.4f}".format(accuracy_score(y_test, clf_stack.predict(X_test))))
+
