@@ -1,8 +1,12 @@
 # Hypothesis testing
 # Assessment of how reasonable the observed data are assuming a hypothesis is true
-# null Hypothesis
+# Hypothesis is Null Hypothesis
+
+#Permutation
+# Random reordering of entries in a array
 # permutable sample
-np.random.permutation()
+
+# np.random.permutation()
 
 # the null hypothesis is that the distributions for the two groups are the same
 
@@ -22,10 +26,10 @@ def permutation_sample(data1, data2):
 
     return perm_sample_1, perm_sample_2
 
+# visualizing permutaiton sampling
 for _ in range(50):
     # Generate permutation samples
     perm_sample_1, perm_sample_2 = permutation_sample(rain_june,rain_november)
-
 
     # Compute ECDFs
     x_1, y_1 = ecdf(perm_sample_1)
@@ -49,16 +53,28 @@ _ = plt.xlabel('monthly rainfall (mm)')
 _ = plt.ylabel('ECDF')
 plt.show()
 
+# We expect these might be differently distributed, 
+# so we will take permutation samples to see how their ECDFs would look if they were identically distributed.
+
 # Notice that the permutation samples ECDFs overlap and give a purple haze. 
-# None of the ECDFs from the permutation samples overlap with the observed data, suggesting that the hypothesis is not commensurate with the data. 
+# None of the ECDFs from the permutation samples overlap with the observed data, 
+# suggesting that the hypothesis is not commensurate with the data. 
 # June and November rainfall are not identically distributed.
 
+####################################################################
 ## Test statistics and p-values
-# test statistic: a single number that can be computed from observed data and from data you simulate under the null hypothesis
-# p-value: the probability of obtainnign a value of your test statistics that is at least as extreme as what was observed, under the assumption the null hypothesis is true
-# is the probability of seeing the apparent effect if the null hypothesis is true.
-# significal statistical: low-pvalues. which means that it is unlikely to have occurred by chance. (poco probable que haya ocurrido por casualidad)
+# Hypothesis Testing: assessment of how reasonable the observed data are assuming a hypothesis is true
 
+# Test statistic: a single number that can be computed from observed data and from data you simulate under the null hypothesis
+# It serves to compare between two (observed data & hypothesis)
+
+# p-value: the probability of getting a value of your test statistics 
+# that is at least as extreme as what was observed, under the assumption the null hypothesis is true
+# - is the probability of seeing the apparent effect if the null hypothesis is true.
+# - NOT the probability that the null hypothesis is true
+
+# significal statistical: low-pvalues. 
+# which means that it is unlikely to have occurred by chance. (poco probable que haya ocurrido por casualidad)
 
 def draw_perm_reps(data_1, data_2, func, size=1):
     """Generate multiple permutation replicates."""
@@ -127,10 +143,13 @@ print('p-value =', p)
 # 2) define your test statistics3)
 # 3) generate many sets of simulated data assuming the null hypothesis true
 # 4) compute the test statistic for each simulated data set
-# 5) the p-value is the fraction of your simulated data sets for which the test statistics is at least as extreme as for the real data
+# 5) the p-value is the fraction of your simulated data sets for which the test statistics
+# is at least as extreme as for the real data
 # https://github.com/AllenDowney/ThinkStats2/blob/master/thinkstats2/thinkstats2.py#L2987
 
 # A one-sample bootstrap hypothesis test
+# GOAL: you want to see if Frog B and Frog C have similar impact forces.
+
 # Another juvenile frog was studied, Frog C, and you want to see if Frog B and Frog C have similar impact forces. 
 # Unfortunately, you do not have Frog C's impact forces available, but you know they have a mean of 0.55 N. 
 # Because you don't have the original data, you cannot do a permutation test, and you cannot assess the hypothesis that the forces from Frog B and Frog C come from the same distribution. 
@@ -138,8 +157,11 @@ print('p-value =', p)
 
 ## A one-sample bootstrap hypothesis test
 # To set up the bootstrap hypothesis test, you will take the mean as our test statistic. 
+
 # Remember, your goal is to calculate the probability of getting a mean impact force 
-# less than or equal to what was observed for Frog B if the hypothesis that the true mean of Frog B's impact forces is equal to that of Frog C is true. 
+# less than or equal to what was observed for Frog B (H0)
+# if the hypothesis that the true mean of Frog B's impact forces is equal to that of Frog C is true. (H1)
+
 # You first translate all of the data of Frog B such that the mean is 0.55 N. 
 # This involves adding the mean force of Frog C and subtracting the mean force of Frog B from each measurement of Frog B. 
 # This leaves other properties of Frog B's distribution, such as the variance, unchanged.
@@ -158,6 +180,8 @@ print('p = ', p)
 # p =  0.0046
 # 0.05%
 # Great work! The low p-value suggests that the null hypothesis that Frog B and Frog C have the same mean impact force is false.
+
+#########3
 
 
 ## A two-sample bootstrap hypothesis test for difference of means
@@ -180,11 +204,12 @@ force_a_shifted = force_a - np.mean(force_a) + mean_force
 force_b_shifted = force_b - np.mean(force_b) + mean_force
 
 # Compute 10,000 bootstrap replicates from shifted arrays
+# SIMULATE HYPOTHESIS THAT THEIR MEANS ARE IN FACT, EQUALS.
 bs_replicates_a = draw_bs_reps(force_a_shifted, np.mean, 10000)
 bs_replicates_b = draw_bs_reps(force_b_shifted, np.mean, 10000)
 
 # Get replicates of difference of means: bs_replicates
-bs_replicates = bs_replicates_a - bs_replicates_b
+bs_replicates = bs_replicates_a - bs_replicates_b # could be math.abs?
 
 # Compute and print p-value: p
 p = np.sum(bs_replicates>= empirical_diff_means) / len(bs_replicates)

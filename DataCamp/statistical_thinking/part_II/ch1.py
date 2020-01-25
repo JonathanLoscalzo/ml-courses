@@ -1,4 +1,8 @@
-# optimal parameters
+# Optimal parameters
+# plot theorical normal distribution with mean and std from the data.
+# If we believe that the process that generates our dat gives Normally distributed results
+# the set of parameters closest to the real normal distribution.
+
 # calculate parameters from your data
 # statistics inference
 
@@ -21,6 +25,10 @@ _ = plt.ylabel('PDF')
 plt.show()
 
 # We see the typical shape of the Exponential distribution, going from a maximum at 0 and decaying to the right.
+# THIS IS THE exponential distribution that our story could follow.
+# Now, we have to test if our story follows it.
+
+# Do the same, with the real data
 # Create an ECDF from real data: x, y
 x, y = ecdf(nohitter_times)
 
@@ -40,7 +48,11 @@ plt.ylabel('CDF')
 plt.show()
 
 # It looks like no-hitters in the modern era of Major League Baseball are Exponentially distributed. 
-# Based on the story of the Exponential distribution, this suggests that they are a random process; when a no-hitter will happen is independent of when the last no-hitter was.
+# Based on the story of the Exponential distribution, this suggests that they are a random process; 
+# when a no-hitter will happen is independent of when the last no-hitter was.
+
+# How is this parameter optimal?
+# Now sample out of an exponential distribution with τ being twice as large as the optimal τ. Do it again for τ half as large.
 
 # Plot the theoretical CDFs
 plt.plot(x_theor, y_theor)
@@ -68,6 +80,7 @@ plt.show()
 
 
 ###################################################
+
 # Plot the illiteracy rate versus fertility
 _ = plt.plot(iliteracy,fertility, marker='.', linestyle='none')
 
@@ -81,8 +94,11 @@ plt.show()
 
 # Show the Pearson correlation coefficient
 print(pearson_r(illiteracy, fertility))
+# https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
 #####################################################
+# polyfit(x, y, deg)
+
 # Plot the illiteracy rate versus fertility
 _ = plt.plot(illiteracy, fertility, marker='.', linestyle='none')
 plt.margins(0.02)
@@ -108,7 +124,7 @@ plt.show()
 
 
 #################
-
+# Test many slopes to obtain de minimun in a graphical way.
 # Specify slopes to consider: a_vals
 a_vals = np.linspace(0, 0.1, 200)
 
@@ -127,8 +143,20 @@ plt.ylabel('sum of square of residuals')
 plt.show()
 
 ######################################################3
-# 
 # Anscombe's quartet
+# Anscombe's quartet comprises four data sets that have nearly identical simple descriptive statistics, 
+# yet have very different distributions and appear very different when graphed.
+# same: mean, variance (std), correlation, regression line...
+
+# Para enfatizar la importancia de mirar los datos antes de analizarlos.
+# GRAPHICALS EDA FIrst!
+# Why should exploratory data analysis be the first step in an analysis of data 
+# (after getting your data imported and cleaned, of course)?
+# 1- You can be protected from misinterpretation of the type demonstrated by Anscombe's quartet.
+# 2- EDA provides a good starting point for planning the rest of your analysis.
+# 3- EDA is not really any more difficult than any of the subsequent analysis, 
+# so there is no excuse for not exploring the data.
+
 # Perform linear regression: a, b
 a, b = np.polyfit(x,y,1)
 

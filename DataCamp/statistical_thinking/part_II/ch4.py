@@ -74,6 +74,7 @@ for i in range(10000):
 # Compute p-value: p
 p = np.sum(perm_replicates>=r_obs) / len(perm_replicates)
 print('p-val =', p)
+# p tends to be 0
 
 
 # You got a p-value of zero. In hacker statistics, this means that your p-value is very low, 

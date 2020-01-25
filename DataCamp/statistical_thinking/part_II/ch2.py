@@ -1,3 +1,14 @@
+# Sampling with replacement
+# - we repeat the "real" experiment in a statistical way
+# - Resampling & get summary statistics.
+# - Boostrapping: The use of resampled data to perfom statistics inference
+# - Boostrap sample: each array (or experiment) that we resampled
+# - bostrap replicate: statistics computed over resampled data.
+
+# np.random.choice(a, size=None, replace=True, p=None)
+
+from itertools import permutations
+
 # generation boostrap replicates
 for _ in range(50):
     # Generate bootstrap sample: bs_sample
@@ -19,6 +30,12 @@ _ = plt.ylabel('ECDF')
 
 # Show the plot
 plt.show()
+######################################33
+# Bostrap confidence intervals
+# If we repeated measurements over and over egain, p% of the
+# observed values would lie within the p% confidence interval.
+
+# 95% confidence interval: np.percentile([2.5, 97.5])
 
 # generating Bootstrap confidence intervals
 def bootstrap_replicate_1d(data, func):
@@ -45,7 +62,7 @@ def draw_bs_reps(data, func, size=1):
 bs_replicates = draw_bs_reps(rainfall, np.mean, 10000)
 
 # Compute and print SEM
-sem = np.std(rainfall) / np.sqrt(len(rainfall))
+sem = np.std(rainfall) / np.sqrt(len(rainfall)) #????
 print(sem)
 
 # Compute and print standard deviation of bootstrap replicates
@@ -100,6 +117,19 @@ plt.show()
 # 95% confidence interval = [660.67280876 871.63077689] games
 # This gives you an estimate of what the typical time between no-hitters is. It could be anywhere between 660 and 870 games.
 
+########################################
+# Pairs bootstrap
+# https://en.wikipedia.org/wiki/Parametric_model
+# Specifically, a parametric model is a family of probability distributions that has a finite number of parameters.
+#  - poisson, normal, binomial, ...and
+
+# Pairs boostrap fro linear regression
+# - Resampling in pairs
+# - compute slope & intercept from resampled data
+# - each slope & intercept is a botstrap bootstrap_replicate
+# - compute confidence intervals from percentiles of boostrap replicates
+
+# slice real data from "boostrapped" indices.
 
 ## NON-parametrics - pairs boostrap
 
@@ -115,6 +145,7 @@ def draw_bs_pairs_linreg(x, y, size=1):
 
     # Generate replicates
     for i in range(size):
+        # we choice indices instead of data! because arrays are ordered and indexed
         bs_inds = np.random.choice(inds, size=len(inds))
         bs_x, bs_y = x[bs_inds], y[bs_inds]
         bs_slope_reps[i], bs_intercept_reps[i] = np.polyfit(bs_x, bs_y, 1)
