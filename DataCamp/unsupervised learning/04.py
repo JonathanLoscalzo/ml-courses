@@ -259,3 +259,5 @@ similarities.nlargest()
 # Van Morrison         0.872452
 # Leonard Cohen        0.864763
 # Bob Dylan            0.859047
+
+# https://scikit-learn.org/stable/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html
