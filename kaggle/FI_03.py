@@ -15,6 +15,7 @@ def previous_attributions(series):
     return series.expanding(min_periods=2).sum() - series
 
 #####################################
+# https://www.mikulskibartosz.name/the-difference-between-the-expanding-and-rolling-window-in-pandas/
 
 import itertools
 cat_features = ['ip', 'app', 'device', 'os', 'channel']
